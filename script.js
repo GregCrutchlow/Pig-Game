@@ -12,15 +12,29 @@ const btnHold = document.querySelector('.btn--hold');
 const current0El = document.getElementById('current--0');
 const current1El = document.getElementById('current--1');
 
-// Starting conditions of game
-score1El.textContent = 0;
-score2El.textContent = 0;
-diceEl.classList.add('hidden');
+let scores, currentScore, activePlayer, playing;
 
-const scores = [0, 0];
-let currentScore = 0;
-let activePlayer = 0;
-let playing = true;
+// Starting conditions of game
+
+const init = () => {
+	scores = [0, 0];
+	currentScore = 0;
+	activePlayer = 0;
+	playing = true;
+
+	current0El.textContent = 0;
+	current1El.textContent = 0;
+	score1El.textContent = 0;
+	score2El.textContent = 0;
+
+	diceEl.classList.add('hidden');
+	player0El.classList.remove('player--winner');
+	player1El.classList.remove('player--winner');
+	player0El.classList.add('player--active');
+	player1El.classList.remove('player--active');
+};
+
+init();
 
 const switchPlayer = () => {
 	document.getElementById(`current--${activePlayer}`).textContent = 0;
@@ -35,7 +49,6 @@ btnRoll.addEventListener('click', () => {
 	if (playing) {
 		// 1. Generating a random dice roll (random number)
 		const dice = Math.trunc(Math.random() * 6 + 1);
-
 		// 2. Display the dice roll
 		diceEl.classList.remove('hidden');
 		diceEl.src = `./assets/dice-${dice}.png`;
@@ -56,10 +69,8 @@ btnHold.addEventListener('click', () => {
 		// 1. Add current score to active player's score
 		scores[activePlayer] += currentScore;
 		document.getElementById(`score--${activePlayer}`).textContent = scores[activePlayer];
-
 		// 2. Check if player's score is >= 100
-
-		if (scores[activePlayer] >= 10) {
+		if (scores[activePlayer] >= 100) {
 			// Finish the game
 			playing = false;
 			diceEl.classList.add('hidden');
@@ -71,3 +82,5 @@ btnHold.addEventListener('click', () => {
 		}
 	}
 });
+
+btnNew.addEventListener('click', init);
